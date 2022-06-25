@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> _initPlatformState() async {
-    print('*** trying platform');
+    print('*** trying platformVersion');
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      print('*** have platform');
+      print('*** have platformVersion $platformVersion');
       _platformVersion = platformVersion;
     });
   }
@@ -79,7 +79,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      print('*** have voices');
+      print('*** have voices $voices');
       _voices = voices;
     });
   }
