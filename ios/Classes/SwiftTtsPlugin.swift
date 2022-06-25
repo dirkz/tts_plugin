@@ -56,6 +56,9 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
             synthesizer.speak(utterance)
 
             result(true)
+        case "cancel":
+            let success = synthesizer.stopSpeaking(at: .immediate)
+            result(success);
         default:
             result(FlutterMethodNotImplemented)
         }
