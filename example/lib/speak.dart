@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:tts_plugin/tts_plugin.dart';
 
 class Speak extends StatefulWidget {
-  const Speak({Key? key, required this.voice, required this.ttsPlugin})
+  const Speak(
+      {Key? key,
+      required this.voice,
+      required this.ttsPlugin,
+      required this.random})
       : super(key: key);
 
   @override
@@ -13,6 +17,7 @@ class Speak extends StatefulWidget {
 
   final Voice voice;
   final TtsPlugin ttsPlugin;
+  final Random random;
 }
 
 class _SpeakState extends State<Speak> {
@@ -60,7 +65,7 @@ class _SpeakState extends State<Speak> {
       if (messages.length == 1) {
         _message = messages[0];
       } else {
-        _message = messages[_random.nextInt(messages.length - 1)];
+        _message = messages[widget.random.nextInt(messages.length - 1)];
       }
     });
 
@@ -135,7 +140,6 @@ class _SpeakState extends State<Speak> {
 
   final _messagesByName = <String, List<String>>{};
   final _messagesByLang = <String, List<String>>{};
-  final _random = Random.secure();
 
   String? _message;
   String? _errorMessage;

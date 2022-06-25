@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:tts_plugin/tts_plugin.dart';
@@ -35,8 +37,10 @@ class _MyAppState extends State<MyApp> {
             body: ListView.separated(
                 itemCount: _voices.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final speak =
-                      Speak(voice: _voices[index], ttsPlugin: _ttsPlugin);
+                  final speak = Speak(
+                      voice: _voices[index],
+                      ttsPlugin: _ttsPlugin,
+                      random: _random);
                   return ListTile(
                     title: Text(
                         "${_voices[index].name} ${_voices[index].language} (${_voices[index].voiceURL})"),
@@ -49,6 +53,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   final _ttsPlugin = TtsPlugin();
+  final _random = Random.secure();
 
   String _platformVersion = 'Unknown';
   List<Voice> _voices = [];
