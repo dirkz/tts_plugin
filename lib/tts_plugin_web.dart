@@ -70,14 +70,11 @@ class TtsPluginWeb extends TtsPluginPlatform {
   Future<bool> speak(String text) {
     final jsVoice = _voiceMap[_voice];
     if (jsVoice != null) {
-      final utterance = html.SpeechSynthesisUtterance(text);
-      utterance.voice = jsVoice as SpeechSynthesisVoice;
-      final speech = _synth as html.SpeechSynthesis?;
-
-      if (speech != null) {
-        speech.speak(utterance);
-        return Future.value(true);
-      }
+      final jsUtterance = js.JsObject(
+          js.context["SpeechSynthesisUtterance"] as js.JsFunction, [""]);
+      jsUtterance['voice'] = jsVoice;
+      _synth.callMethod('speak', [jsUtterance]);
+      return Future.value(true);
     }
 
     return Future.value(false);
