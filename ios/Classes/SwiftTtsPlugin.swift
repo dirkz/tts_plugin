@@ -37,7 +37,7 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
             if voice == nil {
                 result(false)
             } else {
-                result(true)
+                result(enableSession())
             }
         case "speak":
             guard let args = call.arguments as? [Any] else {
@@ -99,20 +99,16 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
     }
 
     private func speak(text: String, result: @escaping FlutterResult) {
-        func disableAVSession() -> Bool {
-            do {
-                try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-                return true
-            } catch {
-                return false
-            }
-        }
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = voice
 
+        synthesizer.speak(utterance)
+
+        result(true)
+    }
+
+    private func enableSession() -> Bool {
         do {
-            defer {
-                let _ = disableAVSession()
-            }
-
             if #available(iOS 10.0, *) {
                 try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord,
                                                                 mode: .default,
@@ -123,14 +119,10 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
             try AVAudioSession.sharedInstance().setActive(true,
                                                           options: .notifyOthersOnDeactivation)
 
-            let utterance = AVSpeechUtterance(string: text)
-            utterance.voice = voice
-
-            synthesizer.speak(utterance)
-
-            result(true)
-        } catch {
-            result(false)
+            return true
+        }
+        catch {
+            return false
         }
     }
 }
