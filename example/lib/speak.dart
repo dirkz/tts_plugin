@@ -5,10 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:tts_plugin/tts_plugin.dart';
 
 class Speak extends StatefulWidget {
-  const Speak({Key? key}) : super(key: key);
+  const Speak({Key? key, required this.voice}) : super(key: key);
 
   @override
   State<Speak> createState() => _SpeakState();
+
+  final Voice voice;
 }
 
 class _SpeakState extends State<Speak> {
