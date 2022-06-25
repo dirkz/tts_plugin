@@ -2,8 +2,7 @@
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:async';
-import 'dart:html' as html show window, SpeechSynthesisVoice;
+import 'dart:html' as html show window;
 
 import 'dart:js' as js;
 
@@ -32,7 +31,7 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<List<Voice>> getVoices() {
-    List<Voice> _jsVoiceToVoiceList(obj) {
+    List<Voice> toVoiceList(obj) {
       final voices = <Voice>[];
       for (var jsVoice in obj) {
         final language = jsVoice['lang'];
@@ -49,40 +48,10 @@ class TtsPluginWeb extends TtsPluginPlatform {
       return voices;
     }
 
-    List<Voice> _speechVoiceToVoiceList(List<html.SpeechSynthesisVoice> speechVoices) {
-      final voices = <Voice>[];
-      for (var speechVoice in speechVoices) {
-        final language = speechVoice.lang;
-        final name = speechVoice.name;
-        final url = speechVoice.voiceUri;
-        if (language != null && url != null && name != null) {
-          final voice = Voice(language: language, voiceURL: url, name: name);
-          // TODO: Store the original voice?
-          voices.add(voice);
-        } else {
-          print('*** strange voice $speechVoice');
-        }
-      }
-      return voices;
-    }
-
-    final gotVoices = Completer<List<Voice>>();
-
-    final speech = html.window.speechSynthesis;
-    if (speech != null) {
-      speech.addEventListener("onvoiceschanged", (event) {
-        final voices = _speechVoiceToVoiceList(speech.getVoices());
-        gotVoices.complete(voices);
-      });
-      speech.getVoices();
-    }
-
-    return gotVoices.future;
-
-    final tmpVoices1 = _jsVoiceToVoiceList(_synth.callMethod("getVoices"));
+    final tmpVoices1 = toVoiceList(_synth.callMethod("getVoices"));
     if (tmpVoices1.isEmpty) {
       return Future(() {
-        return _jsVoiceToVoiceList(_synth.callMethod("getVoices"));
+        return toVoiceList(_synth.callMethod("getVoices"));
       });
     } else {
       return Future.value(tmpVoices1);
