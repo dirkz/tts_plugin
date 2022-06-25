@@ -2,7 +2,8 @@
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html show window, SpeechSynthesisUtterance, SpeechSynthesis;
+import 'dart:html' as html
+    show window, SpeechSynthesisUtterance, SpeechSynthesis;
 import 'dart:html';
 
 import 'dart:js' as js;
@@ -15,7 +16,8 @@ import 'tts_plugin_platform_interface.dart';
 class TtsPluginWeb extends TtsPluginPlatform {
   /// Constructs a TtsPluginWeb
   TtsPluginWeb() {
-        _synth = js.JsObject.fromBrowserObject(js.context["speechSynthesis"] as js.JsObject);
+    _synth = js.JsObject.fromBrowserObject(
+        js.context["speechSynthesis"] as js.JsObject);
   }
 
   static void registerWith(Registrar registrar) {
@@ -31,22 +33,23 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<List<Voice>> getVoices() {
-    var tmpVoices = _synth.callMethod("getVoices");
-
-    final voices = <Voice>[];
-    for (var htmlVoice in tmpVoices) {
-      final language = htmlVoice['lang'];
-      final name = htmlVoice['name'];
-      final url = htmlVoice['voiceURI'];
-      if (language != null && url != null && name != null) {
-        final voice = Voice(language: language, voiceURL: url, name: name);
-        voices.add(voice);
-      } else {
-        print('*** strange voice $htmlVoice');
+    _synth.callMethod("getVoices");
+    return Future(() {
+      var tmpVoices = _synth.callMethod("getVoices");
+      final voices = <Voice>[];
+      for (var htmlVoice in tmpVoices) {
+        final language = htmlVoice['lang'];
+        final name = htmlVoice['name'];
+        final url = htmlVoice['voiceURI'];
+        if (language != null && url != null && name != null) {
+          final voice = Voice(language: language, voiceURL: url, name: name);
+          voices.add(voice);
+        } else {
+          print('*** strange voice $htmlVoice');
+        }
       }
-    }
-
-    return Future.value(voices);
+      return voices;
+    });
   }
 
   @override
@@ -60,12 +63,12 @@ class TtsPluginWeb extends TtsPluginPlatform {
     final utterance = html.SpeechSynthesisUtterance(text);
     utterance.voice = _voice as SpeechSynthesisVoice?;
     final speech = _synth as html.SpeechSynthesis?;
-    
+
     if (speech != null) {
       speech.speak(utterance);
       return Future.value(true);
     }
-    
+
     return Future.value(false);
   }
 
