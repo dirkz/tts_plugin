@@ -3,8 +3,7 @@
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html
-    show window, SpeechSynthesisUtterance, SpeechSynthesis;
-import 'dart:html';
+    show window;
 
 import 'dart:js' as js;
 
