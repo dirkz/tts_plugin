@@ -2,6 +2,13 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'tts_plugin_method_channel.dart';
 
+class Voice {
+  String name;
+  String language;
+
+  Voice({required this.name, required this.language});
+}
+
 abstract class TtsPluginPlatform extends PlatformInterface {
   /// Constructs a TtsPluginPlatform.
   TtsPluginPlatform() : super(token: _token);
