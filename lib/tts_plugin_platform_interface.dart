@@ -1,13 +1,9 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'tts_plugin_method_channel.dart';
+import 'tts_plugin_voice.dart';
 
-class Voice {
-  String name;
-  String language;
-
-  Voice({required this.name, required this.language});
-}
+export 'tts_plugin_voice.dart';
 
 abstract class TtsPluginPlatform extends PlatformInterface {
   /// Constructs a TtsPluginPlatform.
@@ -21,7 +17,7 @@ abstract class TtsPluginPlatform extends PlatformInterface {
   ///
   /// Defaults to [MethodChannelTtsPlugin].
   static TtsPluginPlatform get instance => _instance;
-  
+
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [TtsPluginPlatform] when
   /// they register themselves.

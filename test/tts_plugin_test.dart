@@ -4,12 +4,15 @@ import 'package:tts_plugin/tts_plugin_platform_interface.dart';
 import 'package:tts_plugin/tts_plugin_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MockTtsPluginPlatform 
+class MockTtsPluginPlatform
     with MockPlatformInterfaceMixin
     implements TtsPluginPlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<List<Voice>> getVoices() =>
+      Future.value(<Voice>[Voice(language: "ru-RU", name: "Milena")]);
 }
 
 void main() {
@@ -23,7 +26,7 @@ void main() {
     TtsPlugin ttsPlugin = TtsPlugin();
     MockTtsPluginPlatform fakePlatform = MockTtsPluginPlatform();
     TtsPluginPlatform.instance = fakePlatform;
-  
+
     expect(await ttsPlugin.getPlatformVersion(), '42');
   });
 }
