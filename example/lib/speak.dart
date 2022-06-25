@@ -57,18 +57,7 @@ class _SpeakState extends State<Speak> {
 
   _initState() async {
     _initMessages();
-
-    final messages = _messagesByName[widget.voice.name] ??
-        _messagesByLang[widget.voice.language] ??
-        [_defaultMessage];
-    setState(() {
-      if (messages.length == 1) {
-        _message = messages[0];
-      } else {
-        _message = messages[widget.random.nextInt(messages.length - 1)];
-      }
-    });
-
+    _choseRandomMessage();
     _speak();
   }
 
@@ -96,6 +85,19 @@ class _SpeakState extends State<Speak> {
       final altLang = lang.replaceFirst('_', '-');
       update(_messagesByLang, altLang, message);
     }
+  }
+
+  _choseRandomMessage() {
+    final messages = _messagesByName[widget.voice.name] ??
+        _messagesByLang[widget.voice.language] ??
+        [_defaultMessage];
+    setState(() {
+      if (messages.length == 1) {
+        _message = messages[0];
+      } else {
+        _message = messages[widget.random.nextInt(messages.length)];
+      }
+    });
   }
 
   TextStyle _defaultTextStyle() {
@@ -130,6 +132,7 @@ class _SpeakState extends State<Speak> {
   }
 
   void _speakAgain() async {
+    _choseRandomMessage();
     await widget.ttsPlugin.cancel();
     _speak();
   }
