@@ -35,9 +35,13 @@ class _MyAppState extends State<MyApp> {
             body: ListView.separated(
                 itemCount: _voices.length,
                 itemBuilder: (BuildContext context, int index) {
+                  final speak = Speak(voice: _voices[index]);
                   return ListTile(
-                      title: Text(
-                          "${_voices[index].name} (${_voices[index].language})"));
+                    title: Text(
+                        "${_voices[index].name} (${_voices[index].language})"),
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => speak)),
+                  );
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider())));
