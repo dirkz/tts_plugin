@@ -2,6 +2,8 @@
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
+import 'dart:async';
+
 import 'dart:html' as html show window;
 
 import 'dart:js' as js;
@@ -48,14 +50,22 @@ class TtsPluginWeb extends TtsPluginPlatform {
       return voices;
     }
 
-    final tmpVoices1 = toVoiceList(_synth.callMethod("getVoices"));
-    if (tmpVoices1.isEmpty) {
-      return Future(() {
-        return toVoiceList(_synth.callMethod("getVoices"));
-      });
-    } else {
-      return Future.value(tmpVoices1);
+    final voicesComplete = Completer<List<Voice>>();
+    
+    voicesHandler(event) {
+      final tmpVoices = toVoiceList(_synth.callMethod("getVoices"));
+      voicesComplete.complete(tmpVoices);
     }
+
+    final jsVoicesHandler = js.allowInterop(voicesHandler);
+    _synth['onvoiceschanged'] = jsVoicesHandler;
+
+    final tmpVoices = toVoiceList(_synth.callMethod("getVoices"));
+    if (tmpVoices.isNotEmpty) {
+      voicesComplete.complete(tmpVoices);
+    }
+
+    return voicesComplete.future;
   }
 
   @override
