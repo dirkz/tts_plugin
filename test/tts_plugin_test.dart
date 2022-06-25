@@ -14,8 +14,8 @@ class MockTtsPluginPlatform
   Future<List<Voice>> getVoices() => Future.value([_voiceMilena]);
 
   @override
-  Future<void> speak({required Voice voice, required String text}) =>
-      Future.value();
+  Future<Synth> speak({required Voice voice, required String text}) =>
+      Future.value(Synth());
 }
 
 void main() {

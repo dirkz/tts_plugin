@@ -69,6 +69,7 @@ public class TtsPlugin: NSObject, FlutterPlugin {
             }
 
             synth.startSpeaking(text)
+            result(synth)
         default:
             result(FlutterMethodNotImplemented)
         }
