@@ -8,4 +8,9 @@ class Voice {
     return Voice(
         name: json['name'] as String, language: json['language'] as String);
   }
+
+  @override
+  String toString() {
+    return "name: $name, language: $language";
+  }
 }
