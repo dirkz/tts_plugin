@@ -2,7 +2,7 @@ class Voice {
   final String name;
   final String language;
 
-  /// Internally used for identifying the voice
+  /// _Internally_ used for identifying the voice
   final String voiceURL;
 
   Voice({required this.voiceURL, required this.name, required this.language});

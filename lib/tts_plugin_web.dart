@@ -4,6 +4,8 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html show window;
 
+import 'dart:js' as js;
+
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'tts_plugin_platform_interface.dart';
@@ -11,7 +13,9 @@ import 'tts_plugin_platform_interface.dart';
 /// A web implementation of the TtsPluginPlatform of the TtsPlugin plugin.
 class TtsPluginWeb extends TtsPluginPlatform {
   /// Constructs a TtsPluginWeb
-  TtsPluginWeb();
+  TtsPluginWeb() {
+        _synth = js.JsObject.fromBrowserObject(js.context["speechSynthesis"] as js.JsObject);
+  }
 
   static void registerWith(Registrar registrar) {
     TtsPluginPlatform.instance = TtsPluginWeb();
@@ -26,18 +30,13 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<List<Voice>> getVoices() {
-    final synth = html.window.speechSynthesis;
-    if (synth == null) {
-      return Future.value([]);
-    }
-    print('*** before getVoices()');
-    final htmlVoices = html.window.speechSynthesis?.getVoices() ?? [];
-    print('*** after getVoices()');
+    var tmpVoices = _synth.callMethod("getVoices");
+
     final voices = <Voice>[];
-    for (var htmlVoice in htmlVoices) {
-      final language = htmlVoice.lang;
-      final url = htmlVoice.voiceUri;
-      final name = htmlVoice.name;
+    for (var htmlVoice in tmpVoices) {
+      final language = htmlVoice['lang'];
+      final name = htmlVoice['name'];
+      final url = name;
       if (language != null && url != null && name != null) {
         final voice = Voice(language: language, voiceURL: url, name: name);
         voices.add(voice);
@@ -45,6 +44,7 @@ class TtsPluginWeb extends TtsPluginPlatform {
         print('*** strange voice $htmlVoice');
       }
     }
+
     return Future.value(voices);
   }
 
@@ -62,4 +62,6 @@ class TtsPluginWeb extends TtsPluginPlatform {
   Future<bool> cancel() {
     return Future.value(false);
   }
+
+  late js.JsObject _synth;
 }
