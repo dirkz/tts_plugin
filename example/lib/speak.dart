@@ -24,7 +24,7 @@ class _SpeakState extends State<Speak> {
         appBar: AppBar(
           title: const Text('Speak'),
         ),
-        body: Center(child: Text(_message)));
+        body: Center(child: Text(_message ?? _defaultMessage)));
   }
 
   _initState() {
@@ -43,8 +43,7 @@ class _SpeakState extends State<Speak> {
     }
 
     final message = _messagesByName[widget.voice.name] ??
-        _messagesByLang[widget.voice.language] ??
-        "No message found";
+        _messagesByLang[widget.voice.language];
     setState(() {
       _message = message;
     });
@@ -52,7 +51,8 @@ class _SpeakState extends State<Speak> {
 
   final _messagesByName = <String, String>{};
   final _messagesByLang = <String, String>{};
-  String _message = "No message yet";
+  static const String _defaultMessage = "No message to speak";
+  String? _message;
 
   static const _voicesText = """
 Agnes               en_US    # Isn't it nice to have a computer that will talk to you?
