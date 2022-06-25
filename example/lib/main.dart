@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
                       Speak(voice: _voices[index], ttsPlugin: _ttsPlugin);
                   return ListTile(
                     title: Text(
-                        "${_voices[index].name} (${_voices[index].language})"),
+                        "${_voices[index].name} ${_voices[index].language} (${_voices[index].handleName})"),
                     onTap: () => Navigator.push(context,
                         MaterialPageRoute(builder: (context) => speak)),
                   );
