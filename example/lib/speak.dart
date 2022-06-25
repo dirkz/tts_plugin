@@ -53,6 +53,10 @@ class _SpeakState extends State<Speak> {
   _initState() async {
     _initMessages();
 
+    print('*** voice ${widget.voice}');
+    print('*** messages by name ${_messagesByName[widget.voice.name]}');
+    print('*** messages by language ${_messagesByLang[widget.voice.language]}');
+
     final messages = _messagesByName[widget.voice.name] ??
         _messagesByLang[widget.voice.language] ??
         [_defaultMessage];
