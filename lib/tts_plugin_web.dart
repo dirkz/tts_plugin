@@ -50,7 +50,8 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<bool> setVoice(Voice voice) {
-    return Future.value(false);
+    _voice = voice;
+    return Future.value(true);
   }
 
   @override
@@ -64,4 +65,5 @@ class TtsPluginWeb extends TtsPluginPlatform {
   }
 
   late js.JsObject _synth;
+  Voice? _voice;
 }
