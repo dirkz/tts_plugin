@@ -27,4 +27,9 @@ class MethodChannelTtsPlugin extends TtsPluginPlatform {
         await methodChannel.invokeMethod<List<dynamic>>('getVoices');
     return voices?.map(Voice.fromJson).toList() ?? <Voice>[];
   }
+
+  @override
+  Future<void> speak({required Voice voice, required String text}) async {
+    await methodChannel.invokeMethod("speak", [voice, text]);
+  }
 }

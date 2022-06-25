@@ -12,6 +12,10 @@ class MockTtsPluginPlatform
 
   @override
   Future<List<Voice>> getVoices() => Future.value([_voiceMilena]);
+
+  @override
+  Future<void> speak({required Voice voice, required String text}) =>
+      Future.value();
 }
 
 void main() {
@@ -35,6 +39,14 @@ void main() {
     TtsPluginPlatform.instance = fakePlatform;
 
     expect(await ttsPlugin.getVoices(), [_voiceMilena]);
+  });
+
+  test('speak', () async {
+    TtsPlugin ttsPlugin = TtsPlugin();
+    MockTtsPluginPlatform fakePlatform = MockTtsPluginPlatform();
+    TtsPluginPlatform.instance = fakePlatform;
+
+    await ttsPlugin.speak(voice: _voiceMilena, text: "some text");
   });
 }
 
