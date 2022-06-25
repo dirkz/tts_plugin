@@ -26,15 +26,20 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
-      ),
-    );
+        home: Scaffold(
+            appBar: AppBar(
+              title: Text(_platformVersion),
+            ),
+            body: ListView.separated(
+                itemCount: _voices.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                          "${_voices[index].name} (${_voices[index].language})"));
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider())));
   }
 
   final _ttsPlugin = TtsPlugin();
