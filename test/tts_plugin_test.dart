@@ -17,8 +17,7 @@ class MockTtsPluginPlatform
   Future<bool> setVoice(Voice voice) => Future.value(true);
 
   @override
-  Future<void> speak(String text) =>
-      Future.value();
+  Future<bool> speak(String text) => Future.value(true);
 }
 
 void main() {
