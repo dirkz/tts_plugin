@@ -1,6 +1,11 @@
 class Voice {
-  String name;
-  String language;
+  final String name;
+  final String language;
 
   Voice({required this.name, required this.language});
+
+  static Voice fromJson(dynamic json) {
+    return Voice(
+        name: json['name'] as String, language: json['language'] as String);
+  }
 }

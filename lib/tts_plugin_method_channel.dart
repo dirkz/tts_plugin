@@ -18,8 +18,13 @@ class MethodChannelTtsPlugin extends TtsPluginPlatform {
 
   @override
   Future<List<Voice>> getVoices() async {
-    final voices =
-        await methodChannel.invokeMethod<List<Voice>>('getVoices') ?? [];
-    return voices;
+    // invokeMethod here returns a Future<dynamic> that completes to a
+    // List<dynamic> with Map<dynamic, dynamic> entries. Post-processing
+    // code thus cannot assume e.g. List<Map<String, String>> even though
+    // the actual values involved would support such a typed container.
+    // The correct type cannot be inferred with any value of `T`.
+    final List<dynamic>? voices =
+        await methodChannel.invokeMethod<List<dynamic>>('getVoices');
+    return voices?.map(Voice.fromJson).toList() ?? <Voice>[];
   }
 }
