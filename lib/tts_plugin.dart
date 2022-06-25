@@ -1,8 +1,6 @@
-import 'dart:ffi';
-
 import 'tts_plugin_platform_interface.dart';
 
-export 'tts_plugin_voice.dart';
+export 'voice.dart';
 
 class TtsPlugin {
   Future<String?> getPlatformVersion() {
@@ -19,5 +17,9 @@ class TtsPlugin {
 
   Future<bool> speak(String text) {
     return TtsPluginPlatform.instance.speak(text);
+  }
+
+  Future<bool> cancel() {
+    return TtsPluginPlatform.instance.cancel();
   }
 }

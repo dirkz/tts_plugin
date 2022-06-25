@@ -1,9 +1,9 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'tts_plugin_method_channel.dart';
-import 'tts_plugin_voice.dart';
+import 'voice.dart';
 
-export 'tts_plugin_voice.dart';
+export 'voice.dart';
 
 abstract class TtsPluginPlatform extends PlatformInterface {
   /// Constructs a TtsPluginPlatform.
@@ -39,6 +39,10 @@ abstract class TtsPluginPlatform extends PlatformInterface {
   }
 
   Future<bool> speak(String text) {
-    throw UnimplementedError('speak(voice, text) has not been implemented.');
+    throw UnimplementedError('speak(text) has not been implemented.');
+  }
+
+  Future<bool> cancel() {
+    throw UnimplementedError('cancel() has not been implemented.');
   }
 }
