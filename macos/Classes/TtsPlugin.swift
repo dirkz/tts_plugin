@@ -20,12 +20,12 @@ public class TtsPlugin: NSObject, FlutterPlugin {
                 let attrs = NSSpeechSynthesizer.attributes(forVoice: voiceHandleName)
 
                 guard let voiceName = attrs[NSSpeechSynthesizer.VoiceAttributeKey.name] as? String else {
-                    result(error("getVoices(): NSSpeechSynthesizer.VoiceAttributeKey.name is not a String"))
+                    result(error("\(call.method): NSSpeechSynthesizer.VoiceAttributeKey.name is not a String"))
                     return
                 }
 
                 guard let locale = attrs[NSSpeechSynthesizer.VoiceAttributeKey.localeIdentifier] as? String else {
-                    result(error("getVoices(): NSSpeechSynthesizer.VoiceAttributeKey.localeIdentifier is not a String"))
+                    result(error("\(call.method): NSSpeechSynthesizer.VoiceAttributeKey.localeIdentifier is not a String"))
                     return
                 }
 
@@ -38,42 +38,30 @@ public class TtsPlugin: NSObject, FlutterPlugin {
             result(voices);
         case "speak":
             guard let args = call.arguments as? [Any] else {
-                result(error("speak(): Expected a parameter List"))
+                result(error("\(call.method): Expected a parameter List"))
                 return;
             }
 
-            guard let voice = args.first as? [String:String] else {
-                result(error("speak(): Expected a voice [String:String] as first parameter"))
+            guard let text = args[0] as? String else {
+                result(error("\(call.method): Expected a String as second parameter, for the text to speak"))
                 return;
-            }
-
-            guard let voiceHandleString = voice[TtsPlugin.keyVoiceURL] else {
-                result(error("speak(): Expected \(TtsPlugin.keyVoiceURL) in the voice dictionary"))
-                return;
-            }
-
-            guard let text = args[1] as? String else {
-                result(error("speak(): Expected a String as second parameter, for the text to speak"))
-                return;
-            }
-
-            let theVoiceName = NSSpeechSynthesizer.VoiceName(rawValue: voiceHandleString)
-
-            let success = synthesizer.setVoice(theVoiceName)
-
-            if (!success) {
-                result(error("speak(): Doesn't look like a correct voice name: \(voiceHandleString)"))
-                return
             }
 
             synthesizer.startSpeaking(text)
+        case "setVoice":
+            guard let voiceURL = TtsPlugin.extractVoiceURL(methodName: call.method,
+                                                           call: call,
+                                                           result: result) else {
+                return
+            }
+
+            let theVoice = NSSpeechSynthesizer.VoiceName(rawValue: voiceURL)
+            let success = synthesizer.setVoice(theVoice)
+            result(success)
+
         default:
             result(FlutterMethodNotImplemented)
         }
-    }
-
-    private func error(_ message: String) -> FlutterError {
-        return FlutterError(code: message, message: nil, details: nil)
     }
 
     private static let keyVoiceURL = "voiceURL"
@@ -83,4 +71,33 @@ public class TtsPlugin: NSObject, FlutterPlugin {
     private lazy var synthesizer: NSSpeechSynthesizer = {
         NSSpeechSynthesizer()
     }()
+
+    private func error(_ message: String) -> FlutterError {
+        return TtsPlugin.error(message)
+    }
+
+    private static func error(_ message: String) -> FlutterError {
+        return FlutterError(code: message, message: nil, details: nil)
+    }
+
+    private static func extractVoiceURL(methodName: String,
+                                        call: FlutterMethodCall,
+                                        result: @escaping FlutterResult) -> String? {
+        guard let args = call.arguments as? [Any] else {
+            result(error("\(methodName): Expected a parameter List"))
+            return nil;
+        }
+
+        guard let voice = args.first as? [String:String] else {
+            result(error("\(methodName): Expected a voice dictionary as first parameter"))
+            return nil;
+        }
+
+        guard let voiceURL = voice[TtsPlugin.keyVoiceURL] else {
+            result(error("\(methodName): Expected \(TtsPlugin.keyVoiceURL) in the voice dictionary"))
+            return nil;
+        }
+
+        return voiceURL
+    }
 }

@@ -29,7 +29,7 @@ class MethodChannelTtsPlugin extends TtsPluginPlatform {
   }
 
   @override
-  Future<void> speak({required Voice voice, required String text}) async {
-    await methodChannel.invokeMethod("speak", [voice.toJson(), text]);
+  Future<void> speak(String text) async {
+    await methodChannel.invokeMethod("speak", [text]);
   }
 }

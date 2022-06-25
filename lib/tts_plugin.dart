@@ -17,7 +17,7 @@ class TtsPlugin {
     return TtsPluginPlatform.instance.setVoice(voice);
   }
 
-  Future<void> speak({required Voice voice, required String text}) {
-    return TtsPluginPlatform.instance.speak(voice: voice, text: text);
+  Future<void> speak(String text) {
+    return TtsPluginPlatform.instance.speak(text);
   }
 }
