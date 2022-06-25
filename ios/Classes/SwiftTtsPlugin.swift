@@ -14,6 +14,18 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "getPlatformVersion":
             result("iOS " + UIDevice.current.systemVersion)
+        case "getVoices":
+            let speechVoices = AVSpeechSynthesisVoice.speechVoices()
+
+            var voices = [[String:String]]()
+            for speechVoice in speechVoices {
+                let voiceDict: [String:String] = [SwiftTtsPlugin.keyName: speechVoice.name,
+                                                  SwiftTtsPlugin.keyLanguage: speechVoice.language,
+                                                  SwiftTtsPlugin.keyVoiceURL: speechVoice.identifier]
+                voices.append(voiceDict)
+            }
+
+            result(voices);
         default:
             result(FlutterMethodNotImplemented)
         }
