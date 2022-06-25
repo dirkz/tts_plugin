@@ -26,6 +26,19 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
             }
 
             result(voices);
+        case "setVoice":
+            guard let voiceURL = SwiftTtsPlugin.extractVoiceURL(methodName: call.method,
+                                                                call: call,
+                                                                result: result) else {
+                return
+            }
+
+            voice = AVSpeechSynthesisVoice(identifier: voiceURL)
+            if voice == nil {
+                result(false)
+            } else {
+                result(true)
+            }
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -38,6 +51,8 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
     private lazy var synthesizer: AVSpeechSynthesizer = {
         AVSpeechSynthesizer()
     }()
+
+    private var voice: AVSpeechSynthesisVoice?
 
     private func error(_ message: String) -> FlutterError {
         return SwiftTtsPlugin.error(message)
