@@ -33,11 +33,9 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<List<Voice>> getVoices() {
-    _synth.callMethod("getVoices");
-    return Future(() {
-      var tmpVoices = _synth.callMethod("getVoices");
+    List<Voice> toVoiceList(obj) {
       final voices = <Voice>[];
-      for (var htmlVoice in tmpVoices) {
+      for (var htmlVoice in obj) {
         final language = htmlVoice['lang'];
         final name = htmlVoice['name'];
         final url = htmlVoice['voiceURI'];
@@ -49,7 +47,16 @@ class TtsPluginWeb extends TtsPluginPlatform {
         }
       }
       return voices;
-    });
+    }
+
+    final tmpVoices1 = toVoiceList(_synth.callMethod("getVoices"));
+    if (tmpVoices1.isEmpty) {
+      return Future(() {
+        return toVoiceList(_synth.callMethod("getVoices"));
+      });
+    } else {
+      return Future.value(tmpVoices1);
+    }
   }
 
   @override
