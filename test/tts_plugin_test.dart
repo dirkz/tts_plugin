@@ -18,6 +18,9 @@ class MockTtsPluginPlatform
 
   @override
   Future<bool> speak(String text) => Future.value(true);
+
+  @override
+  Future<bool> cancel() => Future.value(true);
 }
 
 void main() {
