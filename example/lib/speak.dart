@@ -27,17 +27,25 @@ class _SpeakState extends State<Speak> {
           title: const Text('Speak'),
         ),
         body: Column(children: [
-          _messageOrError(),
-          ElevatedButton(onPressed: _speakAgain, child: const Text('Repeat'))
+          Expanded(child: _messageOrError()),
+          Container(
+              padding: const EdgeInsets.only(bottom: _inset),
+              child: ElevatedButton(
+                  onPressed: _speakAgain,
+                  child: Text('Repeat', style: _defaultTextStyle())))
         ]));
   }
 
   Widget _messageOrError() {
+    Text text;
     if (_errorMessage == null) {
-      return Center(child: Text(_message ?? _defaultMessage));
+      text = Text(_message ?? _defaultMessage, style: _defaultTextStyle());
     } else {
-      return Center(child: Text(_errorMessage ?? ''));
+      text = Text(_errorMessage ?? '', style: _defaultTextStyle());
     }
+
+    return Center(
+        child: Container(padding: const EdgeInsets.all(_inset), child: text));
   }
 
   _initState() async {
@@ -65,6 +73,12 @@ class _SpeakState extends State<Speak> {
     if (successSetCurrentVoice) {
       _speak();
     }
+  }
+
+  TextStyle _defaultTextStyle() {
+    return TextStyle(
+        fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize ??
+            _defaultMessageFontSize);
   }
 
   Future<bool> _setCurrentVoice() async {
@@ -105,6 +119,9 @@ class _SpeakState extends State<Speak> {
   final _messagesByName = <String, String>{};
   final _messagesByLang = <String, String>{};
   static const String _defaultMessage = "No message to speak";
+  static const _inset = 10.0;
+  static const _defaultMessageFontSize = 32.0;
+
   String? _message;
   String? _errorMessage;
 
