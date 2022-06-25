@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 import 'package:tts_plugin/tts_plugin.dart';
@@ -26,7 +28,10 @@ class _SpeakState extends State<Speak> {
         appBar: AppBar(
           title: const Text('Speak'),
         ),
-        body: _messageOrError());
+        body: Column(children: [
+          _messageOrError(),
+          ElevatedButton(onPressed: _speakAgain, child: const Text('Repeat'))
+        ]));
   }
 
   Widget _messageOrError() {
@@ -37,7 +42,7 @@ class _SpeakState extends State<Speak> {
     }
   }
 
-  _initState() {
+  _initState() async {
     final lines = _voicesText.split('\n');
     for (var line in lines) {
       if (line.isEmpty) {
@@ -58,7 +63,20 @@ class _SpeakState extends State<Speak> {
       _message = message;
     });
 
-    _speak();
+    final successSetCurrentVoice = await _setCurrentVoice();
+    if (successSetCurrentVoice) {
+      _speak();
+    }
+  }
+
+  Future<bool> _setCurrentVoice() async {
+    final success = await widget.ttsPlugin.setVoice(widget.voice);
+    if (!success) {
+      setState(() {
+        _errorMessage = "Could not set the voice";
+      });
+    }
+    return success;
   }
 
   _speak() async {
@@ -72,6 +90,17 @@ class _SpeakState extends State<Speak> {
           _errorMessage = "Could not set the voice";
         });
       }
+    }
+  }
+
+  void _speakAgain() async {
+    final successCancel = await widget.ttsPlugin.cancel();
+    if (!successCancel) {
+      setState(() {
+        _errorMessage = "Could not cancel the current speech";
+      });
+    } else {
+      _speak();
     }
   }
 
