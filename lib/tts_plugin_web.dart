@@ -72,6 +72,7 @@ class TtsPluginWeb extends TtsPluginPlatform {
       final jsUtterance = js.JsObject(
           js.context["SpeechSynthesisUtterance"] as js.JsFunction, [""]);
       jsUtterance['voice'] = jsVoice;
+      jsUtterance['text'] = text;
       _synth.callMethod('speak', [jsUtterance]);
       return Future.value(true);
     }
