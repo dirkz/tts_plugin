@@ -11,8 +11,7 @@ class MockTtsPluginPlatform
   Future<String?> getPlatformVersion() => Future.value('42');
 
   @override
-  Future<List<Voice>> getVoices() =>
-      Future.value([Voice(language: "ru-RU", name: "Milena")]);
+  Future<List<Voice>> getVoices() => Future.value([_voiceMilena]);
 }
 
 void main() {
@@ -27,6 +26,16 @@ void main() {
     MockTtsPluginPlatform fakePlatform = MockTtsPluginPlatform();
     TtsPluginPlatform.instance = fakePlatform;
 
-    expect(await ttsPlugin.getPlatformVersion(), '42');
+    expect(await ttsPlugin.getVoices(), [_voiceMilena]);
+  });
+
+  test('getVoices', () async {
+    TtsPlugin ttsPlugin = TtsPlugin();
+    MockTtsPluginPlatform fakePlatform = MockTtsPluginPlatform();
+    TtsPluginPlatform.instance = fakePlatform;
+
+    expect(await ttsPlugin.getVoices(), [_voiceMilena]);
   });
 }
+
+final _voiceMilena = Voice(language: "ru-RU", name: "Milena");
