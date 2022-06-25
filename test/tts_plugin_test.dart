@@ -51,4 +51,4 @@ void main() {
 }
 
 final _voiceMilena =
-    Voice(handleName: "some_url", language: "ru-RU", name: "Milena");
+    Voice(voiceURL: "some_url", language: "ru-RU", name: "Milena");

@@ -2,10 +2,6 @@ import Cocoa
 import FlutterMacOS
 
 public class TtsPlugin: NSObject, FlutterPlugin {
-    public static let keyHandleName = "handleName"
-    public static let keyName = "name"
-    public static let keyLanguage = "language"
-
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "tts_plugin", binaryMessenger: registrar.messenger)
         let instance = TtsPlugin()
@@ -35,7 +31,7 @@ public class TtsPlugin: NSObject, FlutterPlugin {
 
                 let voiceDict: [String:String] = [TtsPlugin.keyName: voiceName,
                                                   TtsPlugin.keyLanguage: locale,
-                                                  TtsPlugin.keyHandleName: voiceHandleName.rawValue]
+                                                  TtsPlugin.keyVoiceURL: voiceHandleName.rawValue]
                 voices.append(voiceDict)
             }
 
@@ -51,8 +47,8 @@ public class TtsPlugin: NSObject, FlutterPlugin {
                 return;
             }
 
-            guard let voiceHandleString = voice[TtsPlugin.keyHandleName] else {
-                result(error("speak(): Expected \(TtsPlugin.keyHandleName) in the voice dictionary"))
+            guard let voiceHandleString = voice[TtsPlugin.keyVoiceURL] else {
+                result(error("speak(): Expected \(TtsPlugin.keyVoiceURL) in the voice dictionary"))
                 return;
             }
 
@@ -74,7 +70,11 @@ public class TtsPlugin: NSObject, FlutterPlugin {
         }
     }
 
-    func error(_ message: String) -> FlutterError {
+    private func error(_ message: String) -> FlutterError {
         return FlutterError(code: message, message: nil, details: nil)
     }
+
+    private static let keyVoiceURL = "voiceURL"
+    private static let keyName = "name"
+    private static let keyLanguage = "language"
 }
