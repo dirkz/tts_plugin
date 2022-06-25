@@ -68,10 +68,7 @@ class _SpeakState extends State<Speak> {
       }
     });
 
-    final successSetCurrentVoice = await _setCurrentVoice();
-    if (successSetCurrentVoice) {
-      _speak();
-    }
+    _speak();
   }
 
   _initMessages() {
@@ -119,7 +116,7 @@ class _SpeakState extends State<Speak> {
   _speak() async {
     final message = _message;
     if (message != null) {
-      final success = await widget.ttsPlugin.setVoice(widget.voice);
+      final success = await _setCurrentVoice();
       if (success) {
         await widget.ttsPlugin.cancel();
         widget.ttsPlugin.speak(message);
