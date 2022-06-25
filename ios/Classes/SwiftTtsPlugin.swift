@@ -50,12 +50,7 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
                 return;
             }
 
-            let utterance = AVSpeechUtterance(string: text)
-            utterance.voice = voice
-
-            synthesizer.speak(utterance)
-
-            result(true)
+            speak(text: text, result: result)
         case "cancel":
             let success = synthesizer.stopSpeaking(at: .immediate)
             result(success);
@@ -101,5 +96,41 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
         }
 
         return voiceURL
+    }
+
+    private func speak(text: String, result: @escaping FlutterResult) {
+        func disableAVSession() -> Bool {
+            do {
+                try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+                return true
+            } catch {
+                return false
+            }
+        }
+
+        do {
+            defer {
+                let _ = disableAVSession()
+            }
+
+            if #available(iOS 10.0, *) {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord,
+                                                                mode: .default,
+                                                                options: .defaultToSpeaker)
+            } else {
+                // Fallback on earlier versions
+            }
+            try AVAudioSession.sharedInstance().setActive(true,
+                                                          options: .notifyOthersOnDeactivation)
+
+            let utterance = AVSpeechUtterance(string: text)
+            utterance.voice = voice
+
+            synthesizer.speak(utterance)
+
+            result(true)
+        } catch {
+            result(false)
+        }
     }
 }
