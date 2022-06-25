@@ -13,7 +13,14 @@ public class TtsPlugin: NSObject, FlutterPlugin {
     case "getPlatformVersion":
       result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
     case "getVoices":
-        result([]);
+        let voiceDictsRaw = NSSpeechSynthesizer.availableVoices.map { voiceName in
+            return NSSpeechSynthesizer.attributes(forVoice: voiceName)
+        }
+        let voiceDicts = voiceDictsRaw.map { voiceDictRaw in
+            ["name": voiceDictRaw[NSSpeechSynthesizer.VoiceAttributeKey.name],
+             "language": voiceDictRaw[NSSpeechSynthesizer.VoiceAttributeKey.localeIdentifier]]
+        }
+        result(voiceDicts);
     default:
       result(FlutterMethodNotImplemented)
     }
