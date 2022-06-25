@@ -82,7 +82,8 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<bool> cancel() {
-    return Future.value(false);
+      _synth.callMethod('cancel', []);
+    return Future.value(true);
   }
 
   late js.JsObject _synth;
