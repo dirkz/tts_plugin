@@ -22,7 +22,7 @@ class Voice {
 
   @override
   String toString() {
-    return "name: $name, language: $language ($voiceURL)";
+    return "$name, ($language) [$voiceURL]";
   }
 
   static const _keyVoiceURL = 'voiceURL';
