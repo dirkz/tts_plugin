@@ -96,6 +96,7 @@ class _SpeakState extends State<Speak> {
     if (message != null) {
       final success = await widget.ttsPlugin.setVoice(widget.voice);
       if (success) {
+        await widget.ttsPlugin.cancel();
         widget.ttsPlugin.speak(message);
       } else {
         setState(() {
