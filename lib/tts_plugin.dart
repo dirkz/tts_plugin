@@ -13,6 +13,10 @@ class TtsPlugin {
     return TtsPluginPlatform.instance.getVoices();
   }
 
+  Future<bool> setVoice(Voice voice) {
+    return TtsPluginPlatform.instance.setVoice(voice);
+  }
+
   Future<void> speak({required Voice voice, required String text}) {
     return TtsPluginPlatform.instance.speak(voice: voice, text: text);
   }
