@@ -86,5 +86,5 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   late js.JsObject _synth;
   Voice? _voice;
-  final _voiceMap = Map<Voice, js.JsObject>();
+  final _voiceMap = <Voice, js.JsObject>{};
 }
