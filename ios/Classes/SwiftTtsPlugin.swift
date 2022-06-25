@@ -1,5 +1,7 @@
-import Flutter
 import UIKit
+import AVFoundation
+
+import Flutter
 
 public class SwiftTtsPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
