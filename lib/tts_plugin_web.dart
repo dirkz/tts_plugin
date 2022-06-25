@@ -21,12 +21,12 @@ class TtsPluginWeb extends TtsPluginPlatform {
   @override
   Future<String?> getPlatformVersion() async {
     final version = html.window.navigator.userAgent;
-    print('*** version $version');
     return Future.value(version);
   }
 
   @override
   Future<List<Voice>> getVoices() {
+    print('*** getVoices() ${html.window.speechSynthesis?.getVoices()}');
     final htmlVoices = html.window.speechSynthesis?.getVoices() ?? [];
     final voices = <Voice>[];
     for (var htmlVoice in htmlVoices) {
