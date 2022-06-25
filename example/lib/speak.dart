@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:tts_plugin/tts_plugin.dart';
 
 class Speak extends StatefulWidget {
