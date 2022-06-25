@@ -106,14 +106,8 @@ class _SpeakState extends State<Speak> {
   }
 
   void _speakAgain() async {
-    final successCancel = await widget.ttsPlugin.cancel();
-    if (!successCancel) {
-      setState(() {
-        _errorMessage = "Could not cancel the current speech";
-      });
-    } else {
-      _speak();
-    }
+    await widget.ttsPlugin.cancel();
+    _speak();
   }
 
   final _messagesByName = <String, String>{};
