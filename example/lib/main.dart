@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
       platformVersion = 'Failed to get platform version.';
     }
 
-    List voices = <Voice>[];
+    List<Voice> voices = [];
 
     try {
       voices = await _ttsPlugin.getVoices();

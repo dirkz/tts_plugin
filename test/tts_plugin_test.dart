@@ -12,7 +12,7 @@ class MockTtsPluginPlatform
 
   @override
   Future<List<Voice>> getVoices() =>
-      Future.value(<Voice>[Voice(language: "ru-RU", name: "Milena")]);
+      Future.value([Voice(language: "ru-RU", name: "Milena")]);
 }
 
 void main() {
