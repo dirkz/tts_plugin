@@ -39,6 +39,23 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
             } else {
                 result(true)
             }
+        case "speak":
+            guard let args = call.arguments as? [Any] else {
+                result(error("\(call.method): Expected a parameter List"))
+                return;
+            }
+
+            guard let text = args[0] as? String else {
+                result(error("\(call.method): Expected a String as second parameter, for the text to speak"))
+                return;
+            }
+
+            let utterance = AVSpeechUtterance(string: text)
+            utterance.voice = voice
+
+            synthesizer.speak(utterance)
+
+            result(true)
         default:
             result(FlutterMethodNotImplemented)
         }
