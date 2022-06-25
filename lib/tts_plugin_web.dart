@@ -37,7 +37,7 @@ class TtsPluginWeb extends TtsPluginPlatform {
     for (var htmlVoice in tmpVoices) {
       final language = htmlVoice['lang'];
       final name = htmlVoice['name'];
-      final url = name;
+      final url = htmlVoice['voiceURI'];
       if (language != null && url != null && name != null) {
         final voice = Voice(language: language, voiceURL: url, name: name);
         voices.add(voice);
