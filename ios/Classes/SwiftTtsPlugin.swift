@@ -18,6 +18,10 @@ public class SwiftTtsPlugin: NSObject, FlutterPlugin {
     private static let keyName = "name"
     private static let keyLanguage = "language"
 
+    private lazy var synthesizer: AVSpeechSynthesizer = {
+        AVSpeechSynthesizer()
+    }()
+
     private func error(_ message: String) -> FlutterError {
         return SwiftTtsPlugin.error(message)
     }
