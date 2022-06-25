@@ -26,8 +26,9 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<List<Voice>> getVoices() {
-    print('*** getVoices() ${html.window.speechSynthesis?.getVoices()}');
+    print('*** before getVoices()');
     final htmlVoices = html.window.speechSynthesis?.getVoices() ?? [];
+    print('*** after getVoices()');
     final voices = <Voice>[];
     for (var htmlVoice in htmlVoices) {
       final language = htmlVoice.lang;
