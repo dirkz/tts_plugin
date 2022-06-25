@@ -59,12 +59,14 @@ public class TtsPlugin: NSObject, FlutterPlugin {
 
             let theVoiceName = NSSpeechSynthesizer.VoiceName(rawValue: voiceHandleString)
 
-            guard let synth = NSSpeechSynthesizer(voice: theVoiceName) else {
+            let success = synthesizer.setVoice(theVoiceName)
+
+            if (!success) {
                 result(error("speak(): Doesn't look like a correct voice name: \(voiceHandleString)"))
                 return
             }
 
-            synth.startSpeaking(text)
+            synthesizer.startSpeaking(text)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -77,4 +79,8 @@ public class TtsPlugin: NSObject, FlutterPlugin {
     private static let keyVoiceURL = "voiceURL"
     private static let keyName = "name"
     private static let keyLanguage = "language"
+
+    private lazy var synthesizer: NSSpeechSynthesizer = {
+        NSSpeechSynthesizer()
+    }()
 }
