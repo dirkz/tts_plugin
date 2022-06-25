@@ -9,19 +9,23 @@ class Voice {
 
   static Voice fromJson(dynamic json) {
     return Voice(
-        handleName: json['handleName'] as String,
-        name: json['name'] as String,
-        language: json['language'] as String);
+        handleName: json[_keyHandleName] as String,
+        name: json[_keyName] as String,
+        language: json[_keyLanguage] as String);
   }
 
   Map<String, dynamic> toJson() => {
-        'handleName': handleName,
-        'name': name,
-        'language': language,
+        _keyHandleName: handleName,
+        _keyName: name,
+        _keyLanguage: language,
       };
 
   @override
   String toString() {
     return "name: $name, language: $language ($handleName)";
   }
+
+  static const _keyHandleName = 'handleName';
+  static const _keyName = 'name';
+  static const _keyLanguage = 'language';
 }
