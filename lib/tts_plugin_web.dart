@@ -4,6 +4,8 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:async';
 
+import 'dart:developer';
+
 import 'dart:html' as html show window;
 
 import 'dart:js' as js;
@@ -44,7 +46,7 @@ class TtsPluginWeb extends TtsPluginPlatform {
           _voiceMap[voice] = jsVoice;
           voices.add(voice);
         } else {
-          print('*** strange voice $jsVoice');
+          log('*** strange voice $jsVoice');
         }
       }
       return voices;
