@@ -24,16 +24,12 @@ public class TtsPlugin: NSObject, FlutterPlugin {
                 let attrs = NSSpeechSynthesizer.attributes(forVoice: voiceHandleName)
 
                 guard let voiceName = attrs[NSSpeechSynthesizer.VoiceAttributeKey.name] as? String else {
-                    result(FlutterError(code: "NSSpeechSynthesizer.VoiceAttributeKey.name is not a String",
-                                        message: "NSSpeechSynthesizer.VoiceAttributeKey.name is not a String",
-                                        details: nil))
+                    result(error("getVoices(): NSSpeechSynthesizer.VoiceAttributeKey.name is not a String"))
                     return
                 }
 
                 guard let locale = attrs[NSSpeechSynthesizer.VoiceAttributeKey.localeIdentifier] as? String else {
-                    result(FlutterError(code: "NSSpeechSynthesizer.VoiceAttributeKey.localeIdentifier is not a String",
-                                        message: "NSSpeechSynthesizer.VoiceAttributeKey.localeIdentifier is not a String",
-                                        details: nil))
+                    result(error("getVoices(): NSSpeechSynthesizer.VoiceAttributeKey.localeIdentifier is not a String"))
                     return
                 }
 
@@ -46,39 +42,29 @@ public class TtsPlugin: NSObject, FlutterPlugin {
             result(voices);
         case "speak":
             guard let args = call.arguments as? [Any] else {
-                result(FlutterError(code: "Parameter List",
-                                    message: "Expected parameters as list",
-                                    details: nil))
+                result(error("speak(): Expected a parameter List"))
                 return;
             }
 
             guard let voice = args.first as? [String:String] else {
-                result(FlutterError(code: "Voice Parameter",
-                                    message: "Expected a voice [String:String] as first parameter",
-                                    details: nil))
+                result(error("speak(): Expected a voice [String:String] as first parameter"))
                 return;
             }
 
             guard let voiceName = voice[TtsPlugin.keyName] else {
-                result(FlutterError(code: "Voice Name",
-                                    message: "Expected a name in the voice dictionary ([String:String])",
-                                    details: nil))
+                result(error("speak(): Expected \(TtsPlugin.keyName) in the voice dictionary"))
                 return;
             }
 
             guard let text = args[1] as? String else {
-                result(FlutterError(code: "Text Parameter",
-                                    message: "Expected a String as second parameter, for the text to speak",
-                                    details: nil))
+                result(error("speak(): Expected a String as second parameter, for the text to speak"))
                 return;
             }
 
             let theVoiceName = NSSpeechSynthesizer.VoiceName(rawValue: voiceName)
 
             guard let synth = NSSpeechSynthesizer(voice: theVoiceName) else {
-                result(FlutterError(code: "Don't have the correct voice name",
-                                    message: "Don't have the correct voice name",
-                                    details: nil))
+                result(error("speak(): Doesn't look like a correct voice name: \(theVoiceName)"))
                 return
             }
 
@@ -86,5 +72,9 @@ public class TtsPlugin: NSObject, FlutterPlugin {
         default:
             result(FlutterMethodNotImplemented)
         }
+    }
+
+    func error(_ message: String) -> FlutterError {
+        return FlutterError(code: message, message: nil, details: nil)
     }
 }
