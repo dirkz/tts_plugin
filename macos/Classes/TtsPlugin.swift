@@ -47,7 +47,8 @@ public class TtsPlugin: NSObject, FlutterPlugin {
                 return;
             }
 
-            synthesizer.startSpeaking(text)
+            let success = synthesizer.startSpeaking(text)
+            result(success)
         case "setVoice":
             guard let voiceURL = TtsPlugin.extractVoiceURL(methodName: call.method,
                                                            call: call,

@@ -53,10 +53,15 @@ class _SpeakState extends State<Speak> {
     _speak();
   }
 
-  _speak() {
+  _speak() async {
     final message = _message;
     if (message != null) {
-      widget.ttsPlugin.speak(voice: widget.voice, text: message);
+      final success = await widget.ttsPlugin.setVoice(widget.voice);
+      if (success) {
+        widget.ttsPlugin.speak(message);
+      } else {
+        // TODO: Show error
+      }
     }
   }
 

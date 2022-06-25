@@ -34,7 +34,7 @@ abstract class TtsPluginPlatform extends PlatformInterface {
     throw UnimplementedError('getVoices() has not been implemented.');
   }
 
-  Future<void> speak(String text) {
+  Future<bool> speak(String text) {
     throw UnimplementedError('speak(voice, text) has not been implemented.');
   }
 
