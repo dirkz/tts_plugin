@@ -31,12 +31,31 @@ public class TtsPlugin: NSObject, FlutterPlugin {
                                     details: nil))
                 return;
             }
+
             guard let voice = args.first as? [String:String] else {
                 result(FlutterError(code: "Voice Parameter",
                                     message: "Expected a voice [String:String] as first parameter",
                                     details: nil))
                 return;
             }
+
+            guard let voiceName = voice[TtsPlugin.keyLanguage] else {
+                result(FlutterError(code: "Voice Name",
+                                    message: "Expected a name in the voice dictionary ([String:String])",
+                                    details: nil))
+                return;
+            }
+
+            guard let text = args[1] as? String else {
+                result(FlutterError(code: "Text Parameter",
+                                    message: "Expected a String as second parameter, for the text to speak",
+                                    details: nil))
+                return;
+            }
+
+            let theVoiceName = NSSpeechSynthesizer.VoiceName(rawValue: voiceName)
+            let synth = NSSpeechSynthesizer(voice: theVoiceName)
+            synth?.startSpeaking(text)
         default:
             result(FlutterMethodNotImplemented)
         }
