@@ -71,6 +71,13 @@ class _SpeakState extends State<Speak> {
   }
 
   _initMessages() {
+    void update(Map<String, List<String>> dict, String key, String message) {
+      dict.update(key, (existing) {
+        existing.add(message);
+        return existing;
+      }, ifAbsent: () => [message]);
+    }
+
     final lines = _voicesText.split('\n');
     for (var line in lines) {
       if (line.isEmpty) {
@@ -81,15 +88,11 @@ class _SpeakState extends State<Speak> {
       final lang = parts[1];
       final message = parts.sublist(3).join(' ');
 
-      _messagesByName.update(name, (existing) {
-        existing.add(message);
-        return existing;
-      }, ifAbsent: () => [message]);
+      update(_messagesByName, name, message);
+      update(_messagesByLang, lang, message);
 
-      _messagesByLang.update(lang, (existing) {
-        existing.add(message);
-        return existing;
-      }, ifAbsent: () => [message]);
+      final altLang = name.replaceFirst('_', '-');
+      update(_messagesByLang, altLang, message);
     }
   }
 
