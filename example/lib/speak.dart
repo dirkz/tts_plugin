@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:tts_plugin/tts_plugin.dart';
 
 class Speak extends StatefulWidget {
-  const Speak({Key? key, required this.voice}) : super(key: key);
+  const Speak({Key? key, required this.voice, required this.ttsPlugin})
+      : super(key: key);
 
   @override
   State<Speak> createState() => _SpeakState();
 
   final Voice voice;
+  final TtsPlugin ttsPlugin;
 }
 
 class _SpeakState extends State<Speak> {
@@ -47,6 +49,15 @@ class _SpeakState extends State<Speak> {
     setState(() {
       _message = message;
     });
+
+    _speak();
+  }
+
+  _speak() {
+    final message = _message;
+    if (message != null) {
+      widget.ttsPlugin.speak(voice: widget.voice, text: message);
+    }
   }
 
   final _messagesByName = <String, String>{};

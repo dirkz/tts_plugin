@@ -35,7 +35,8 @@ class _MyAppState extends State<MyApp> {
             body: ListView.separated(
                 itemCount: _voices.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final speak = Speak(voice: _voices[index]);
+                  final speak =
+                      Speak(voice: _voices[index], ttsPlugin: _ttsPlugin);
                   return ListTile(
                     title: Text(
                         "${_voices[index].name} (${_voices[index].language})"),
