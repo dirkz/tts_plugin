@@ -3,7 +3,6 @@ import 'dart:ffi';
 import 'tts_plugin_platform_interface.dart';
 
 export 'tts_plugin_voice.dart';
-export 'tts_plugin_synth.dart';
 
 class TtsPlugin {
   Future<String?> getPlatformVersion() {
@@ -14,7 +13,7 @@ class TtsPlugin {
     return TtsPluginPlatform.instance.getVoices();
   }
 
-  Future<Synth> speak({required Voice voice, required String text}) {
+  Future<void> speak({required Voice voice, required String text}) {
     return TtsPluginPlatform.instance.speak(voice: voice, text: text);
   }
 }
