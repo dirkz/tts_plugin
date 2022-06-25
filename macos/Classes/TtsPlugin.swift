@@ -51,8 +51,8 @@ public class TtsPlugin: NSObject, FlutterPlugin {
                 return;
             }
 
-            guard let voiceName = voice[TtsPlugin.keyName] else {
-                result(error("speak(): Expected \(TtsPlugin.keyName) in the voice dictionary"))
+            guard let voiceHandleString = voice[TtsPlugin.keyHandleName] else {
+                result(error("speak(): Expected \(TtsPlugin.keyHandleName) in the voice dictionary"))
                 return;
             }
 
@@ -61,10 +61,10 @@ public class TtsPlugin: NSObject, FlutterPlugin {
                 return;
             }
 
-            let theVoiceName = NSSpeechSynthesizer.VoiceName(rawValue: voiceName)
+            let theVoiceName = NSSpeechSynthesizer.VoiceName(rawValue: voiceHandleString)
 
             guard let synth = NSSpeechSynthesizer(voice: theVoiceName) else {
-                result(error("speak(): Doesn't look like a correct voice name: \(theVoiceName)"))
+                result(error("speak(): Doesn't look like a correct voice name: \(voiceHandleString)"))
                 return
             }
 
