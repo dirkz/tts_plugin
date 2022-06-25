@@ -41,6 +41,7 @@ class TtsPluginWeb extends TtsPluginPlatform {
         final url = htmlVoice['voiceURI'];
         if (language != null && url != null && name != null) {
           final voice = Voice(language: language, voiceURL: url, name: name);
+          _voiceMap[voice] = htmlVoice;
           voices.add(voice);
         } else {
           print('*** strange voice $htmlVoice');
@@ -67,13 +68,16 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<bool> speak(String text) {
-    final utterance = html.SpeechSynthesisUtterance(text);
-    utterance.voice = _voice as SpeechSynthesisVoice?;
-    final speech = _synth as html.SpeechSynthesis?;
+    final htmlVoice = _voiceMap[_voice];
+    if (htmlVoice != null) {
+      final utterance = html.SpeechSynthesisUtterance(text);
+      utterance.voice = htmlVoice as SpeechSynthesisVoice;
+      final speech = _synth as html.SpeechSynthesis?;
 
-    if (speech != null) {
-      speech.speak(utterance);
-      return Future.value(true);
+      if (speech != null) {
+        speech.speak(utterance);
+        return Future.value(true);
+      }
     }
 
     return Future.value(false);
@@ -86,4 +90,5 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   late js.JsObject _synth;
   Voice? _voice;
+  final _voiceMap = Map<Voice, js.JsObject>();
 }
