@@ -91,7 +91,7 @@ class _SpeakState extends State<Speak> {
       update(_messagesByName, name, message);
       update(_messagesByLang, lang, message);
 
-      final altLang = name.replaceFirst('_', '-');
+      final altLang = lang.replaceFirst('_', '-');
       update(_messagesByLang, altLang, message);
     }
   }
