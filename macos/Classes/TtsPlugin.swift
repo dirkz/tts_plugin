@@ -12,6 +12,8 @@ public class TtsPlugin: NSObject, FlutterPlugin {
     switch call.method {
     case "getPlatformVersion":
       result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
+    case "getVoices":
+        result([]);
     default:
       result(FlutterMethodNotImplemented)
     }
