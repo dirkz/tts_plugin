@@ -50,4 +50,5 @@ void main() {
   });
 }
 
-final _voiceMilena = Voice(language: "ru-RU", name: "Milena");
+final _voiceMilena =
+    Voice(handleName: "some_url", language: "ru-RU", name: "Milena");
