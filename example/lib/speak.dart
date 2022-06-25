@@ -26,7 +26,15 @@ class _SpeakState extends State<Speak> {
         appBar: AppBar(
           title: const Text('Speak'),
         ),
-        body: Center(child: Text(_message ?? _defaultMessage)));
+        body: _messageOrError());
+  }
+
+  Widget _messageOrError() {
+    if (_errorMessage == null) {
+      return Center(child: Text(_message ?? _defaultMessage));
+    } else {
+      return Center(child: Text(_errorMessage ?? ''));
+    }
   }
 
   _initState() {
@@ -60,7 +68,9 @@ class _SpeakState extends State<Speak> {
       if (success) {
         widget.ttsPlugin.speak(message);
       } else {
-        // TODO: Show error
+        setState(() {
+          _errorMessage = "Could not set the voice";
+        });
       }
     }
   }
@@ -69,6 +79,7 @@ class _SpeakState extends State<Speak> {
   final _messagesByLang = <String, String>{};
   static const String _defaultMessage = "No message to speak";
   String? _message;
+  String? _errorMessage;
 
   static const _voicesText = """
 Agnes               en_US    # Isn't it nice to have a computer that will talk to you?
