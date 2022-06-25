@@ -33,4 +33,8 @@ abstract class TtsPluginPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  Future<List<Voice>> getVoices() {
+    throw UnimplementedError('getVoices() has not been implemented.');
+  }
 }
