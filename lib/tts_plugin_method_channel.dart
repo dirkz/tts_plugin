@@ -30,7 +30,7 @@ class MethodChannelTtsPlugin extends TtsPluginPlatform {
 
   @override
   Future<bool> setVoice(Voice voice) async {
-    return await methodChannel.invokeMethod("setVoice", [voice]);
+    return await methodChannel.invokeMethod("setVoice", [voice.toJson()]);
   }
 
   @override
