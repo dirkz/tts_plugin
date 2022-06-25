@@ -11,7 +11,15 @@ class MethodChannelTtsPlugin extends TtsPluginPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version =
+        await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
+  }
+
+  @override
+  Future<List<Voice>> getVoices() async {
+    final voices =
+        await methodChannel.invokeMethod<List<Voice>>('getVoices') ?? [];
+    return voices;
   }
 }
