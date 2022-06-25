@@ -49,6 +49,21 @@ class _SpeakState extends State<Speak> {
   }
 
   _initState() async {
+    _initMessages();
+
+    final message = _messagesByName[widget.voice.name] ??
+        _messagesByLang[widget.voice.language];
+    setState(() {
+      _message = message;
+    });
+
+    final successSetCurrentVoice = await _setCurrentVoice();
+    if (successSetCurrentVoice) {
+      _speak();
+    }
+  }
+
+  _initMessages() {
     final lines = _voicesText.split('\n');
     for (var line in lines) {
       if (line.isEmpty) {
@@ -61,17 +76,6 @@ class _SpeakState extends State<Speak> {
 
       _messagesByName[name] = message;
       _messagesByLang[lang] = message;
-    }
-
-    final message = _messagesByName[widget.voice.name] ??
-        _messagesByLang[widget.voice.language];
-    setState(() {
-      _message = message;
-    });
-
-    final successSetCurrentVoice = await _setCurrentVoice();
-    if (successSetCurrentVoice) {
-      _speak();
     }
   }
 
