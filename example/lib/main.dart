@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:tts_plugin/tts_plugin.dart';
 
+import 'speak.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -33,9 +35,8 @@ class _MyAppState extends State<MyApp> {
             body: ListView.separated(
                 itemCount: _voices.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(
+                  return ListTile(
+                      title: Text(
                           "${_voices[index].name} (${_voices[index].language})"));
                 },
                 separatorBuilder: (BuildContext context, int index) =>
