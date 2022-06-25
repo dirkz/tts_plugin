@@ -36,6 +36,16 @@ public class TtsPlugin: NSObject, FlutterPlugin {
             }
 
             result(voices);
+        case "setVoice":
+            guard let voiceURL = TtsPlugin.extractVoiceURL(methodName: call.method,
+                                                           call: call,
+                                                           result: result) else {
+                return
+            }
+
+            let theVoice = NSSpeechSynthesizer.VoiceName(rawValue: voiceURL)
+            let success = synthesizer.setVoice(theVoice)
+            result(success)
         case "speak":
             guard let args = call.arguments as? [Any] else {
                 result(error("\(call.method): Expected a parameter List"))
@@ -49,17 +59,6 @@ public class TtsPlugin: NSObject, FlutterPlugin {
 
             let success = synthesizer.startSpeaking(text)
             result(success)
-        case "setVoice":
-            guard let voiceURL = TtsPlugin.extractVoiceURL(methodName: call.method,
-                                                           call: call,
-                                                           result: result) else {
-                return
-            }
-
-            let theVoice = NSSpeechSynthesizer.VoiceName(rawValue: voiceURL)
-            let success = synthesizer.setVoice(theVoice)
-            result(success)
-
         default:
             result(FlutterMethodNotImplemented)
         }
