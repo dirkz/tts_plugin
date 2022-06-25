@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:tts_plugin/tts_plugin.dart';
@@ -51,10 +53,15 @@ class _SpeakState extends State<Speak> {
   _initState() async {
     _initMessages();
 
-    final message = _messagesByName[widget.voice.name] ??
-        _messagesByLang[widget.voice.language];
+    final messages = _messagesByName[widget.voice.name] ??
+        _messagesByLang[widget.voice.language] ??
+        [_defaultMessage];
     setState(() {
-      _message = message;
+      if (messages.length == 1) {
+        _message = messages[0];
+      } else {
+        _message = messages[_random.nextInt(messages.length - 1)];
+      }
     });
 
     final successSetCurrentVoice = await _setCurrentVoice();
@@ -74,8 +81,15 @@ class _SpeakState extends State<Speak> {
       final lang = parts[1];
       final message = parts.sublist(3).join(' ');
 
-      _messagesByName[name] = message;
-      _messagesByLang[lang] = message;
+      _messagesByName.update(name, (existing) {
+        existing.add(message);
+        return existing;
+      }, ifAbsent: () => [message]);
+
+      _messagesByLang.update(lang, (existing) {
+        existing.add(message);
+        return existing;
+      }, ifAbsent: () => [message]);
     }
   }
 
@@ -115,11 +129,13 @@ class _SpeakState extends State<Speak> {
     _speak();
   }
 
-  final _messagesByName = <String, String>{};
-  final _messagesByLang = <String, String>{};
   static const String _defaultMessage = "No message to speak";
   static const _inset = 10.0;
   static const _defaultMessageFontSize = 32.0;
+
+  final _messagesByName = <String, List<String>>{};
+  final _messagesByLang = <String, List<String>>{};
+  final _random = Random.secure();
 
   String? _message;
   String? _errorMessage;
