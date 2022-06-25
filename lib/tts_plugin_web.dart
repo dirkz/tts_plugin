@@ -35,16 +35,16 @@ class TtsPluginWeb extends TtsPluginPlatform {
   Future<List<Voice>> getVoices() {
     List<Voice> toVoiceList(obj) {
       final voices = <Voice>[];
-      for (var htmlVoice in obj) {
-        final language = htmlVoice['lang'];
-        final name = htmlVoice['name'];
-        final url = htmlVoice['voiceURI'];
+      for (var jsVoice in obj) {
+        final language = jsVoice['lang'];
+        final name = jsVoice['name'];
+        final url = jsVoice['voiceURI'];
         if (language != null && url != null && name != null) {
           final voice = Voice(language: language, voiceURL: url, name: name);
-          _voiceMap[voice] = htmlVoice;
+          _voiceMap[voice] = jsVoice;
           voices.add(voice);
         } else {
-          print('*** strange voice $htmlVoice');
+          print('*** strange voice $jsVoice');
         }
       }
       return voices;
@@ -68,10 +68,10 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<bool> speak(String text) {
-    final htmlVoice = _voiceMap[_voice];
-    if (htmlVoice != null) {
+    final jsVoice = _voiceMap[_voice];
+    if (jsVoice != null) {
       final utterance = html.SpeechSynthesisUtterance(text);
-      utterance.voice = htmlVoice as SpeechSynthesisVoice;
+      utterance.voice = jsVoice as SpeechSynthesisVoice;
       final speech = _synth as html.SpeechSynthesis?;
 
       if (speech != null) {
