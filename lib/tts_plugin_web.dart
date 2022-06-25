@@ -2,7 +2,7 @@
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html show window, SpeechSynthesis;
+import 'dart:html' as html show window;
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
@@ -26,6 +26,10 @@ class TtsPluginWeb extends TtsPluginPlatform {
 
   @override
   Future<List<Voice>> getVoices() {
+    final synth = html.window.speechSynthesis;
+    if (synth == null) {
+      return Future.value([]);
+    }
     print('*** before getVoices()');
     final htmlVoices = html.window.speechSynthesis?.getVoices() ?? [];
     print('*** after getVoices()');
